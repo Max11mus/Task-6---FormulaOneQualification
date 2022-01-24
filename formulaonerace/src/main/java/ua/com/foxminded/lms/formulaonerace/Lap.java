@@ -1,12 +1,13 @@
 package ua.com.foxminded.lms.formulaonerace;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
 public class Lap {
 	 private Racer racer;
-	 Instant startTime;
-	 Instant endTime;
+	 private Instant startTime;
+	 private Instant endTime;
  
 	 public Lap(Racer racer, Instant startTime, Instant endTime) {
 		this.racer = racer;
@@ -33,6 +34,15 @@ public class Lap {
 		this.endTime = endTime;
 	}
 
+	public Duration getLapTime() {
+		return Duration.between(startTime, endTime);
+	}
+	
+	public int compareTo(Lap another) {
+		return this.getLapTime().compareTo(another.getLapTime());
+	
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(racer);
