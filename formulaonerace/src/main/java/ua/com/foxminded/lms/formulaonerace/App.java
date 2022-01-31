@@ -1,32 +1,39 @@
 package ua.com.foxminded.lms.formulaonerace;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
-import ua.com.foxminded.lms.formulaonerace.parsers.EntitiesToReportDTO;
-import ua.com.foxminded.lms.formulaonerace.parsers.FileLoader;
-import ua.com.foxminded.lms.formulaonerace.parsers.StreamsToEntitiesDTO;
+import ua.com.foxminded.lms.formulaonerace.entities.Lap;
+import ua.com.foxminded.lms.formulaonerace.entities.Racer;
 import ua.com.foxminded.lms.formulaonerace.qualificationreport.QualificationReport;
+import ua.com.foxminded.lms.formulaonerace.utils.FileLoader;
+import ua.com.foxminded.lms.formulaonerace.utils.Parser;
+import ua.com.foxminded.lms.formulaonerace.utils.ReportBuilder;
 
 public class App {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+
+		URL racersUrl = ClassLoader.getSystemResource("abbreviations.txt");
+		URL startLogUrl = ClassLoader.getSystemResource("start.log");
+		URL endLogUrl = ClassLoader.getSystemResource("end.log");
+
+		FileLoader fileLoader = new FileLoader();
+		List<String> racersStream = fileLoader.load(racersUrl);
+		List<String> startLogStream = fileLoader.load(startLogUrl);
+		List<String> endLogStream = fileLoader.load(endLogUrl);
 		
-		FileLoader fileLoader = new FileLoader ();    
-		Stream<String> racers = fileLoader.loadRacersDataFromResourse("abbreviations.txt");
-		ArrayList<Stream<String>> lapsLogs = fileLoader.loadLapsDataFromResource("start.log", "end.log");
+		Parser parser = new Parser();
+		HashMap <Racer, Lap> parseResult = parser.parseQualificationResults(racersStream, startLogStream, endLogStream);
 		
-		StreamsToEntitiesDTO streamsToEntitiesDTO = new StreamsToEntitiesDTO() ;
-		streamsToEntitiesDTO.parseToEntities(racers, lapsLogs.get(0), lapsLogs.get(1));
-				
-		
-		EntitiesToReportDTO entitiesToReportDTO = new EntitiesToReportDTO();
-		entitiesToReportDTO.parseEntitiesToReportDTO(streamsToEntitiesDTO.getRacers(), streamsToEntitiesDTO.getLaps());
-		
-		QualificationReport report = entitiesToReportDTO.getReport();
-		
-		System.out.println(report.buildReport());
-						
+		ReportBuilder reportBuilder = new ReportBuilder();
+		QualificationReport report = reportBuilder.buildReport(parseResult);
+
+		System.out.println(report.outputReport());
+
 	}
 
 }

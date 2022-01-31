@@ -26,18 +26,6 @@ public class QualificationReport {
 		}
 	}
 
-	public void clearData() {
-		if (rowsCount != 0) {
-			for (int i = 0; i < rowsCount; i++) {
-				data.get(i).clear();
-			}
-		}
-		data.clear();
-		columnsNames.clear();
-		rowsCount = 0;
-		columnsCount = 0;
-	}
-
 	public String getCell(int row, int column) { // row - (from 0 to rowsCount-1), row - (from 0 to columnsCount-1)
 		return data.get(row).get(column);
 	}
@@ -48,7 +36,7 @@ public class QualificationReport {
 		data.get(row).add(column, value);
 	}
 
-	public String buildReport() {
+	public String outputReport() {
 		String report = "";
 		for (int i = 0; i < columnsCount; i++) {
 			report += alignRightWithSpace("|" + columnsNames.get(i), columnsWidth.get(i));
