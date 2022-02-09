@@ -1,6 +1,13 @@
 package ua.com.foxminded.lms.formulaonerace.qualificationreport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import ua.com.foxminded.lms.formulaonerace.entities.Lap;
+import ua.com.foxminded.lms.formulaonerace.entities.Racer;
 
 public class QualificationReport {
 	public static final String END_OF_LINE = System.getProperty("line.separator");
@@ -10,30 +17,59 @@ public class QualificationReport {
 	private int rowsCount;
 	private int columnsCount;
 
-	public QualificationReport(ArrayList<String> columnsNames, ArrayList<Integer> columnsWidth, int rowsCount) {
-		this.columnsNames = columnsNames;
-		this.columnsWidth = columnsWidth;
+	public QualificationReport() {
+		super();
+		columnsNames = new ArrayList<String>();
+		columnsWidth = new ArrayList<Integer>();
+	}
+
+	public void buildReport(HashMap<Racer, Lap> laps) {
+		if (laps == null)  {
+			throw new IllegalArgumentException("ERROR: Null Pointer Arguments.");
+		}
+		
+		if (laps.size() == 0) {
+			throw new IllegalArgumentException("ERROR: Empty Arguments.");
+		}
+		
+		
+		
+		columnsNames.clear();
+		columnsWidth.clear();
+		columnsNames.add("№");
+		columnsWidth.add(5);
+		columnsNames.add("Racer");
+		columnsWidth.add(40);
+		columnsNames.add("Team");
+		columnsWidth.add(40);
+		columnsNames.add("LapTime");
+		columnsWidth.add(20);
 
 		columnsCount = columnsNames.size();
 
 		data = new ArrayList<ArrayList<String>>();
-		this.rowsCount = rowsCount;
+		this.rowsCount = laps.size();
 		for (int i = 0; i < rowsCount; i++) {
 			data.add(new ArrayList<String>());
 			for (int k = 0; k < columnsCount; k++) {
 				data.get(i).add("");
 			}
 		}
-	}
 
-	public String getCell(int row, int column) { // row - (from 0 to rowsCount-1), row - (from 0 to columnsCount-1)
-		return data.get(row).get(column);
-	}
+		List<Lap> lapsList = laps.values().stream().sorted((lap1, lap2) -> lap1.compareTo(lap2))
+				.collect(Collectors.toList());
 
-	public void setCell(int row, int column, String value) { // row - (from 0 to rowsCount-1), row - (from 0 to
-		// columnsCount-1)
-		data.get(row).remove(column);
-		data.get(row).add(column, value);
+		int counter = 1;
+		int row = 0;
+		for (Iterator<Lap> iterator = lapsList.iterator(); iterator.hasNext();) {
+			Lap lap = iterator.next();
+			setCell(row, 0, Integer.toString(counter));
+			setCell(row, 1, lap.getRacer().getName());
+			setCell(row, 2, lap.getRacer().getTeam());
+			setCell(row, 3, lap.getLapTime().toString());
+			counter++;
+			row++;
+		}
 	}
 
 	public String outputReport() {
@@ -80,6 +116,16 @@ public class QualificationReport {
 		} else {
 			return new String("");
 		}
+	}
+
+	private String getCell(int row, int column) { // row - (from 0 to rowsCount-1), row - (from 0 to columnsCount-1)
+		return data.get(row).get(column);
+	}
+
+	private void setCell(int row, int column, String value) { // row - (from 0 to rowsCount-1), row - (from 0 to
+		// columnsCount-1)
+		data.get(row).remove(column);
+		data.get(row).add(column, value);
 	}
 
 }

@@ -53,6 +53,10 @@ public class Racer {
 		Racer other = (Racer) obj;
 		return Objects.equals(abbrevation, other.abbrevation);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Racer [abbrevation=" + abbrevation + ", name=" + name + ", team=" + team + "]";
+	}
 	
 }

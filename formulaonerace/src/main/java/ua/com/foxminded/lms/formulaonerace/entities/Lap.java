@@ -60,4 +60,9 @@ public class Lap {
 		return Objects.equals(racer, other.racer);
 	}
 
+	@Override
+	public String toString() {
+		return "Lap [racer=" + racer + ", startTime=" + startTime + ", endTime=" + endTime + "]";
+	}
+
 }
