@@ -10,7 +10,11 @@ import java.util.List;
 
 public class FileLoader {
 
-	public List<String> load(URL url) throws IOException {
+	public List<String> load(URL url) throws IOException, URISyntaxException {
+		if (url == null) {
+			throw new IllegalArgumentException("ERROR: Null Pointer Argument.");
+		}
+		
 		List<String> lines;
 		lines = null;
 
@@ -21,8 +25,12 @@ public class FileLoader {
 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			throw e; 
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw e; 
 		}
-
+				
 		return lines;
 
 	}
