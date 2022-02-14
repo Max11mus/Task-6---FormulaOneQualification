@@ -20,7 +20,12 @@ import ua.com.foxminded.lms.formulaonerace.utils.Parser;
 class ParserTest {
 	static Parser parser;
 	static ArrayList<String> abbreviations, startLog, endLog;
+	static int  randomIndex1 = 8;
+	static int  randomIndex2 =18;
+	static int  randomIndex3 = 2;
 	
+
+		
 	@BeforeEach
 	void setUpBeforeTest() throws Exception {
 		parser = new Parser();
@@ -120,8 +125,11 @@ class ParserTest {
 
 	@Test
 	void raiseIllegalArgumentException_WhenAtLeastOneLineFromAbbrevationsInputFileDoesntFitTheFormat() {
-		abbreviations.remove(7);
-		abbreviations.add(7, "hokerhp[ke[hke[hke[rk[jkekj[ekr[jk"); // line that not fit the format
+		abbreviations.remove(randomIndex1);
+		abbreviations.add(randomIndex1, "hokerhp[ke[hke[hke[rk[jkekj[ekr[jk"); // line that
+																											// not fit
+																											// the
+																											// format
 
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
 				() -> parser.parseQualificationResults(abbreviations, startLog, endLog),
@@ -133,8 +141,9 @@ class ParserTest {
 
 	@Test
 	void raiseIllegalArgumentException_WhenAbbrevationFromAbbrevationsListIsNotInUpperCase() {
-		abbreviations.remove(8);
-		abbreviations.add(8, "SpF_Sergio Perez_FORCE INDIA MERCEDES"); // SpF - abbrevation not in UpperCase
+		abbreviations.remove(randomIndex1);
+		abbreviations.add(randomIndex1, "SpF_Sergio Perez_FORCE INDIA MERCEDES");
+				// SpF - abbrevation not in UpperCase
 
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
 				() -> parser.parseQualificationResults(abbreviations, startLog, endLog),
@@ -146,8 +155,9 @@ class ParserTest {
 	@Test
 	void raiseIllegalArgumentException_WhenSizeOfAbbrevationFromAbbrevationsLisIstNotEqualThreeChars() {
 
-		abbreviations.remove(8);
-		abbreviations.add(8, "SPFF_Sergio Perez_FORCE INDIA MERCEDES"); // SPFF - size not equal 3 chars
+		abbreviations.remove(randomIndex1);
+		abbreviations.add(randomIndex1, 
+				"SPFF_Sergio Perez_FORCE INDIA MERCEDES"); // SPFF - size not equal 3 chars
 
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
 				() -> parser.parseQualificationResults(abbreviations, startLog, endLog),
@@ -158,10 +168,12 @@ class ParserTest {
 
 	@Test
 	void raiseIllegalArgumentException_WhenDuplication_AbbrevationsOccursInAbbrevationsList() {
-		abbreviations.remove(8);
-		abbreviations.add(8, "SPF_Sergio Perez_FORCE INDIA MERCEDES"); // SPF - Duplication Abbrevation
-		abbreviations.remove(9);
-		abbreviations.add(9, "SPF_Sergio Perez_FORCE INDIA MERCEDES"); // SPF - Duplication Abbrevation
+		abbreviations.remove(randomIndex1);
+		abbreviations.add(randomIndex1,
+				"SPF_Sergio Perez_FORCE INDIA MERCEDES"); // SPF - Duplication Abbrevation
+		abbreviations.remove(randomIndex1 + 1);
+		abbreviations.add(randomIndex1 + 1,
+				"SPF_Sergio Perez_FORCE INDIA MERCEDES"); // SPF - Duplication Abbrevation
 
 
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
@@ -184,10 +196,11 @@ class ParserTest {
 
 	@Test
 	void raiseIllegalArgumentException_WhenAbbrevationFromLapsLogsIsNotInUpperCase() {
-		startLog.remove(14);
-		startLog.add(14, "SpF2018-05-24_12:12:01.035"); // SpF - abbrevation not in UpperCase
-		endLog.remove(2);
-		endLog.add(2,"SpF2018-05-24_12:13:13.883");
+		startLog.remove(randomIndex2);
+		startLog.add(randomIndex2, "SpF2018-05-24_12:12:01.035"); // SpF - abbrevation not
+																								// in UpperCase
+		endLog.remove(randomIndex3);
+		endLog.add(randomIndex3,"SpF2018-05-24_12:13:13.883");
 		
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
 				() -> parser.parseQualificationResults(abbreviations, startLog, endLog),
@@ -196,6 +209,21 @@ class ParserTest {
 		System.err.println();
 	}
 
+	@Test
+	void raiseIllegalArgumentException_WhenSizeOfAbbrevationFromLapsLogsIstNotEqualThreeChars() {
+		startLog.remove(randomIndex2);
+		startLog.add(randomIndex2, "SF2018-05-24_12:13:13.883"); // SF - size 
+																								// Not Equal Three Chars
+		endLog.remove(randomIndex3);
+		endLog.add(randomIndex3,"SSSF2018-05-24_12:13:13.883");
+		
+		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+				() -> parser.parseQualificationResults(abbreviations, startLog, endLog),
+				"Abbrevation Tag must use CAPITAL letters.");
+		thrown.printStackTrace();
+		System.err.println();
+	}
+	
 	@Test
 	void raiseIllegalArgumentException_WhenDuplication_AbbrevationsOccursInLapsLogs() {
 		startLog.add("SPF2018-05-24_12:12:01.035");
@@ -222,7 +250,7 @@ class ParserTest {
 
 	@Test
 	void raiseIllegalArgumentException_WhenAbbrevationFromLapsLogsMismatched() {
-		startLog.remove(18);
+		startLog.remove(randomIndex2);
 		startLog.add("SVM2018-05-24_12:00:00.000"); // VBM not matched with SVM
 		
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
@@ -234,7 +262,7 @@ class ParserTest {
 	
 	@Test
 	void raiseIllegalArgumentException_WhenTimeFromLapsLogsDoesntFitFormat() {
-		startLog.remove(18);
+		startLog.remove(randomIndex2);
 		startLog.add("VBM18-05-24_12:00:00.000"); // 18-05-24_12:00:00.000 doesnt fit format
 		
 		IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
@@ -246,7 +274,7 @@ class ParserTest {
 	
 
 	@Test
-	void DataMustBeSameAsSampleData() {
+	void dataMustBeSameAsSampleData() {
 		HashMap<Racer, Lap> expected = new HashMap<Racer, Lap>();
 		HashMap<Racer, Lap> actual;		
 		

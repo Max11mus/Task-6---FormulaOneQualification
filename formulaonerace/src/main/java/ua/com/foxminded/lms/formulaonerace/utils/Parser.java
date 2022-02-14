@@ -50,7 +50,7 @@ public class Parser {
 		startLogCopy.sort(String::compareTo);
 		endLogCopy.sort(String::compareTo);
 		
-		ArrayList<Pair<String, String>> lapsLogs = Pair.fromArrayListOfParams(startLogCopy, endLogCopy);
+		ArrayList<Pair<String, String>> lapsLogs = Pair.merge(startLogCopy, endLogCopy);
 		
 		Predicate<Pair<String, String>> equalsAbbrevaitions = p -> 
 			parseAbbrevationFromLapsLogs(p.getFirst()).equals(parseAbbrevationFromLapsLogs(p.getSecond()));		
@@ -68,10 +68,10 @@ public class Parser {
 							+ " Abbrevation from Laps Log doesn't exist in " + "Abbrevation List !!!."));
 
 			try {
-				laps =  new HashMap <> (lapsLogs.stream()
+				laps =   (HashMap <Racer, Lap>) lapsLogs.stream()
 						.map(pair -> new Lap(getRacerFromRacers.apply(pair), parseTime(pair.getFirst()),
 								parseTime(pair.getSecond())))
-						.collect(Collectors.toMap( key -> key.getRacer(), value -> value)));
+						.collect(Collectors.toMap( key -> key.getRacer(), value -> value));
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 				System.err.println();
@@ -82,15 +82,25 @@ public class Parser {
 	}
 	
 	private String parseAbbrevationFromLapsLogs(String input) {
-		String abrevation = input.substring(0, 3);
+		if (input.length() < 3) {
+			throw new IllegalArgumentException(
+					"ERROR: " + input + " in Laps Logs - Abbrevation Tag must have size 3 chars.");
+		}
+		
+		String abbrevation = input.split("[0-9]")[0];
+					
+		if (abbrevation.length() != 3) {
+			throw new IllegalArgumentException(
+					"ERROR: " + input + " in Laps Logs - Abbrevation Tag must have size 3 chars.");
+		}
 		
 		IntPredicate isUperCaseletter =  ch -> Character.isUpperCase(ch);
-		if ( abrevation.chars().anyMatch(isUperCaseletter.negate()::test)){
-			throw new IllegalArgumentException("ERROR: "+ abrevation + 
+		if ( abbrevation.chars().anyMatch(isUperCaseletter.negate()::test)){
+			throw new IllegalArgumentException("ERROR: "+ abbrevation + 
 					" in  Laps Logs - Abbrevation Tag must use CAPITAL letters." );
 		}
 		
-		return abrevation;
+		return abbrevation;
 	}
 
 	private String parseAbbrevationFromAbbrevationList(String input) {

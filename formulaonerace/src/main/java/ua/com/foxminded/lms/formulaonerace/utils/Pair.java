@@ -49,7 +49,7 @@ public final class Pair <First extends Object, Second extends Object> {
 		return "Pair [first=" + first + ", second=" + second + "]";
 	}
 	
-	public static  <First, Second> ArrayList<Pair<First, Second>> fromArrayListOfParams( ArrayList<First> firstArray,
+	public static  <First, Second> ArrayList<Pair<First, Second>> merge( ArrayList<First> firstArray,
 			  ArrayList<Second> secondArray) {
 		if (firstArray.size() != secondArray.size()) {
 			throw new IllegalArgumentException("ERROR: firstArray and secondArray must be same size.");
