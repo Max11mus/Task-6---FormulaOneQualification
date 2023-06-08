@@ -31,9 +31,7 @@ public class QualificationReport {
 		if (laps.size() == 0) {
 			throw new IllegalArgumentException("ERROR: Empty Arguments.");
 		}
-		
-		
-		
+
 		columnsNames.clear();
 		columnsWidth.clear();
 		columnsNames.add("№");

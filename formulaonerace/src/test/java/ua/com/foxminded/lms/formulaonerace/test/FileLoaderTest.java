@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 import ua.com.foxminded.lms.formulaonerace.utils.FileLoader;
 
-
 class FileLoaderTest {
 	static FileLoader fileLoader;
 	

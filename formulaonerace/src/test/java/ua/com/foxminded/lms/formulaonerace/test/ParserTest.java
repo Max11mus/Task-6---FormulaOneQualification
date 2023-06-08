@@ -24,8 +24,6 @@ class ParserTest {
 	static int  randomIndex2 =18;
 	static int  randomIndex3 = 2;
 	
-
-		
 	@BeforeEach
 	void setUpBeforeTest() throws Exception {
 		parser = new Parser();

@@ -18,7 +18,6 @@ class QualificationReportTest {
 static QualificationReport report;
 public static final String END_OF_LINE = System.getProperty("line.separator");
 
-	
 	@BeforeAll
 	static void qualificationReportTestsSetUp() {
 		report = new QualificationReport(); 	 	

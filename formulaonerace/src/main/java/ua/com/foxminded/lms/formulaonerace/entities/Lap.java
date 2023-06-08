@@ -15,7 +15,7 @@ public class Lap {
 		this.endTime = endTime;
 	}
 
-	 public Racer getRacer() {
+	public Racer getRacer() {
 		return racer;
 	}
 	public void setRacer(Racer racer) {
